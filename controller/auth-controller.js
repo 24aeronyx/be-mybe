@@ -65,7 +65,7 @@ const authController = {
     }
   },
 
-  login: async (req,res) => {
+  login: async (req, res) => {
     const errors = validationResult(req)
     if(!errors.isEmpty()){
         return res.status(422).json({errors: errors.array()})
@@ -99,10 +99,27 @@ const authController = {
             expiresIn: "1h"
         })
 
+        res.cookie("token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 3600000
+        })
+
         res.status(200).json({message: "Login successful", token})
     } catch(error){
         console.error("Error during login:", error)
         res.status(500).json({message: "Internal server error"})
+    }
+  },
+
+  logout: async(req, res) => {
+    try{
+      res.clearCookie('token')
+
+      res.status(200).json({message: "Successfully Log Out"})
+    } catch (error){
+      console.error('Error during logout:', error)
+      res.status(500).json({message: "Internal server error"})
     }
   }
 };
