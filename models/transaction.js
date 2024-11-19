@@ -15,13 +15,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   Transaction.init({
     profile_id: DataTypes.INTEGER,
-    type: DataTypes.ENUM,
+    type: DataTypes.ENUM('income', 'outcome'),
     amount: DataTypes.FLOAT,
     transaction_date: DataTypes.DATE,
     description: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Transaction',
+    freezeTableName: true
   });
   return Transaction;
 };

@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       type: {
-        type: Sequelize.ENUM
+        type: Sequelize.ENUM('income','outcome')
       },
       amount: {
         type: Sequelize.FLOAT
