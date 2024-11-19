@@ -1,15 +1,17 @@
 'use strict';
 const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Profile extends Model {
     static associate(models) {
-      // Profile milik Credential
-      Profile.belongsTo(models.Credential, {
-        foreignKey: 'credential_id',
-        as: 'credential',
+      // Menambahkan asosiasi dengan Credential dan MonthlyReport
+      Profile.hasMany(models.Transaction, {
+        foreignKey: 'profile_id',
+        as: 'transactions',
       });
     }
   }
+
   Profile.init({
     credential_id: DataTypes.INTEGER,
     full_name: DataTypes.STRING,
@@ -17,10 +19,15 @@ module.exports = (sequelize, DataTypes) => {
     phone_number: DataTypes.STRING,
     address: DataTypes.TEXT,
     profile_picture: DataTypes.STRING,
+    balance: {
+      type: DataTypes.FLOAT,
+      defaultValue: 0, 
+    }
   }, {
     sequelize,
     modelName: 'Profile',
-    freezeTableName: true,
+    freezeTableName: true
   });
+
   return Profile;
 };
