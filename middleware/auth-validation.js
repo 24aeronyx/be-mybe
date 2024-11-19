@@ -1,5 +1,7 @@
-const {body} = require('express-validator')
-const registerValidation = [
+const { body } = require("express-validator");
+
+const authValidation = {
+  registerValidation: [
     body("email")
       .isEmail()
       .withMessage("Please provide a valid email address")
@@ -24,8 +26,14 @@ const registerValidation = [
       .isMobilePhone()
       .withMessage("Please provide a valid phone number"),
     body("address").optional().isString().trim().escape(),
-  ];
+  ],
 
-  module.exports = {
-    registerValidation,
-  };
+  loginValidation: [
+    body("emailOrUsername")
+      .notEmpty()
+      .withMessage("Email or Username is required"),
+    body("password").notEmpty().withMessage("Password is required"),
+  ],
+};
+
+module.exports = authValidation;

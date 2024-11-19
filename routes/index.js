@@ -1,5 +1,7 @@
 const express = require("express")
 const route = express.Router()
-const { registerValidation} = require('../middleware/auth-validation')
+const authRoute = require('../routes/auth-route')
+
+route.use('/auth', authRoute)
 
 module.exports = route
