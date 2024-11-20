@@ -128,6 +128,10 @@ const transactionController = {
         order: [['transaction_date', 'DESC']]
       })
 
+      if (transactions.length === 0) {
+        return res.status(404).json({ message: 'No transaction history found' });
+      }
+
       res.status(200).json({
         transactions
       })
