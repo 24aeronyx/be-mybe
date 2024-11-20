@@ -6,7 +6,7 @@ const transactionRoute = require('../routes/transaction-route')
 const { authenticateJWT } = require("../middleware/auth")
 
 route.use('/auth', authRoute)
-route.use('/profile', profileRoute)
+route.use('/profile', authenticateJWT, profileRoute)
 route.use('/transaction', authenticateJWT, transactionRoute)
 
 module.exports = route
