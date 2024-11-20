@@ -48,35 +48,30 @@ const profileController = {
   updateProfile: async (req, res) => {
     try {
       const { credential_id } = req.user;
-      const {
-        full_name,
-        date_of_birth,
-        phone_number,
-        address
-      } = req.body;
+      const { full_name, date_of_birth, phone_number, address } = req.body;
 
       const profile = await Profile.findOne({
-        where: {credential_id}
-      })
+        where: { credential_id },
+      });
 
-      if(!profile){
-        return res.status(404).json({message: "Profile not found"})
+      if (!profile) {
+        return res.status(404).json({ message: "Profile not found" });
       }
 
       await profile.update({
         full_name,
         date_of_birth,
         phone_number,
-        address
+        address,
       });
 
       res.status(200).json({
         message: "Profile updated successfully",
-        profile
-      })
+        profile,
+      });
     } catch (error) {
-        console.error('Error updating profile:', error)
-        res.status(500).json({message:'Internal server error'})
+      console.error("Error updating profile:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
   },
 };
