@@ -7,9 +7,9 @@ const {
 } = require("../controller/transaction-controller");
 const router = express.Router();
 
-router.post("/add-income", addIncome);
-router.post("/add-outcome", addOutcome);
+router.post("/income", addIncome);
+router.post("/outcome", addOutcome);
 router.get("/monthly-report", getMonthlyReport);
-router.get("/get-history", getHistory);
+router.get("/history", getHistory);
 
 module.exports = router;

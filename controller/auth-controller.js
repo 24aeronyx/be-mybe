@@ -95,13 +95,13 @@ const authController = {
       };
 
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "7d",
       });
 
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        maxAge: 3600000,
+        maxAge: 360000000,
       });
 
       res.status(200).json({ message: "Login successful", token });
