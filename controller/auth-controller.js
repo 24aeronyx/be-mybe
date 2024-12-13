@@ -1,4 +1,4 @@
-const { Credential, Profile, sequelize } = require("../models");
+const { Credential, Profile, Transaction, sequelize } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
