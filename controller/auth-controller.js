@@ -196,6 +196,62 @@ const authController = {
       res.status(500).json({ message: "Internal server error" });
     }
   },
+
+  deleteAccount: async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    const { email, password } = req.body;
+
+    try {
+      const user = await Credential.findOne({
+        where: { email },
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Validate the password
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: "Invalid password" });
+      }
+
+      // Begin transaction for account deletion
+      await sequelize.transaction(async (t) => {
+        // Delete all related records
+        await Profile.destroy({
+          where: { credential_id: user.id },
+          transaction: t,
+        });
+
+        await Transaction.destroy({
+          where: { user_id: user.id }, // Assuming `user_id` is the foreign key in the `Transaction` table
+          transaction: t,
+        });
+
+        // Add other related models here (e.g., user settings, logs, etc.)
+        // await OtherRelatedModel.destroy({
+        //   where: { user_id: user.id },
+        //   transaction: t,
+        // });
+
+        // Finally, delete the user credentials
+        await Credential.destroy({
+          where: { id: user.id },
+          transaction: t,
+        });
+      });
+
+      res.status(200).json({ message: "Account deleted successfully" });
+    } catch (error) {
+      console.error("Error during account deletion:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
 };
 
 module.exports = authController;
