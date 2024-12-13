@@ -229,7 +229,7 @@ const authController = {
         });
 
         await Transaction.destroy({
-          where: { user_id: user.id }, // Assuming `user_id` is the foreign key in the `Transaction` table
+          where: { profile_id: user.id }, // Assuming `user_id` is the foreign key in the `Transaction` table
           transaction: t,
         });
 
