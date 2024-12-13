@@ -18,8 +18,7 @@
     "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
     "moment-timezone": "^0.5.46",
-    "mysql": "^2.18.1",
-    "mysql2": "^3.11.4",
+    "mysql2": "^3.11.5",
     "nodemailer": "^6.9.16",
     "sequelize": "^6.37.5"
   },
