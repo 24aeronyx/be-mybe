@@ -99,7 +99,6 @@ const authController = {
       });
 
       res.cookie("token", token, {
-        httpOnly: true,
         maxAge: 360000000,
       });
 
