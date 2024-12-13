@@ -1,12 +1,37 @@
 const { Transaction, Profile } = require("../models");
 const { Op } = require("sequelize");
-const moment = require('moment-timezone');
+const moment = require("moment-timezone");
 
 const transactionController = {
   addIncome: async (req, res) => {
     try {
       const { credential_id } = req.user;
-      const { amount, description, title, category } = req.body;
+      const { amount, description, title, category, date } = req.body;
+
+      // Validate the date format (YYYY-MM-DD)
+      const isValidDate = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date);
+      if (!isValidDate) {
+        return res.status(400).json({
+          message:
+            "Invalid date format. Please provide a valid date in YYYY-MM-DD format.",
+        });
+      }
+
+      // Validate category (only income categories are valid)
+      const validCategories = [
+        "Salary",
+        "Investment",
+        "Gift",
+        "Freelance", // Kategori income
+      ];
+
+      if (!validCategories.includes(category)) {
+        return res.status(400).json({
+          message: `Invalid category. Please choose from the following: ${validCategories.join(
+            ", "
+          )}`,
+        });
+      }
 
       const profile = await Profile.findOne({ where: { credential_id } });
 
@@ -16,7 +41,9 @@ const transactionController = {
         });
       }
 
-      const kalimantanTimurTime = moment.tz("Asia/Makassar").format();
+      // The date comes from the frontend already in the correct format (YYYY-MM-DD)
+      // No need for any conversion; we can directly use it to create the transaction.
+      const transactionDate = new Date(date); // This will be in UTC by default
 
       await Transaction.create({
         profile_id: profile.id,
@@ -25,7 +52,7 @@ const transactionController = {
         description,
         title,
         category,
-        transaction_date:  kalimantanTimurTime,
+        transaction_date: transactionDate, // Store the date as inputted (no conversion)
       });
 
       profile.balance = profile.balance + amount;
@@ -52,7 +79,7 @@ const transactionController = {
       }
 
       const kalimantanTimurTime = moment.tz("Asia/Makassar").format();
-      console.log(kalimantanTimurTime)
+      console.log(kalimantanTimurTime);
 
       await Transaction.create({
         profile_id: profile.id,
