@@ -12,4 +12,6 @@ router.post("/outcome", addOutcome);
 router.get("/monthly-report", getMonthlyReport);
 router.get("/history", getHistory);
 
-module.exports = router;
+module.exports = (req, res) => {
+  router(req, res);
+};

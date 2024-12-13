@@ -9,4 +9,6 @@ route.use("/auth", authRoute);
 route.use("/profile", authenticateJWT, profileRoute);
 route.use("/transaction", authenticateJWT, transactionRoute);
 
-module.exports = route;
+module.exports = (req, res) => {
+    route(req, res);
+  };

@@ -11,4 +11,6 @@ router.get("/balance", getBalance);
 router.get("/", getProfile);
 router.put("/", updateProfileValidation, updateProfile);
 
-module.exports = router;
+module.exports = (req, res) => {
+  router(req, res);
+};

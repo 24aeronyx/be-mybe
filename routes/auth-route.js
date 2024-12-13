@@ -18,4 +18,6 @@ router.post("/logout", logout);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
-module.exports = router;
+module.exports = (req, res) => {
+  router(req, res);
+};
