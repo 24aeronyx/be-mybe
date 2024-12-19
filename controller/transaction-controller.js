@@ -68,7 +68,16 @@ const transactionController = {
   addOutcome: async (req, res) => {
     try {
       const { credential_id } = req.user;
-      const { amount, description, title, category } = req.body;
+      const { amount, description, title, category, date } = req.body;
+
+      // Validate the date format (YYYY-MM-DD)
+      const isValidDate = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date);
+      if (!isValidDate) {
+        return res.status(400).json({
+          message:
+            "Invalid date format. Please provide a valid date in YYYY-MM-DD format.",
+        });
+      }
 
       const profile = await Profile.findOne({ where: { credential_id } });
 
@@ -78,8 +87,7 @@ const transactionController = {
         });
       }
 
-      const kalimantanTimurTime = moment.tz("Asia/Makassar").format();
-      console.log(kalimantanTimurTime);
+      const transactionDate = new Date(date); 
 
       await Transaction.create({
         profile_id: profile.id,
@@ -88,7 +96,7 @@ const transactionController = {
         description,
         title,
         category,
-        transaction_date: kalimantanTimurTime,
+        transaction_date: transactionDate, // Store the date as inputted (no conversion)
       });
 
       profile.balance = profile.balance - amount;
